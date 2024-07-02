@@ -25,19 +25,9 @@ export default class RevampedTopicMap extends Component {
     }
   }
 
-  @bind
-  showSummary() {
-    return this.args.outletArgs.model.postStream.showSummary(this.currentUser);
-  }
-
   @action
   showTopReplies() {
     return this.args.outletArgs.model.postStream.showTopReplies();
-  }
-
-  @action
-  collapseSummary() {
-    return this.args.outletArgs.model.postStream.collapseSummary();
   }
 
   @action
@@ -55,8 +45,6 @@ export default class RevampedTopicMap extends Component {
                 @topic={{@outletArgs.model}}
                 @topicDetails={{this.topicDetails}}
                 @collapsed={{true}}
-                @showSummary={{this.showSummary}}
-                @collapseSummary={{this.collapseSummary}}
               />
             </div>
           </div>

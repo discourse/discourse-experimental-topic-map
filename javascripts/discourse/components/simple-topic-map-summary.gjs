@@ -6,7 +6,6 @@ import didInsert from "@ember/render-modifiers/modifiers/did-insert";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
 import { gt } from "truth-helpers";
-import AiSummarySkeleton from "discourse/components/ai-summary-skeleton";
 import ConditionalLoadingSpinner from "discourse/components/conditional-loading-spinner";
 import DButton from "discourse/components/d-button";
 import TopicParticipants from "discourse/components/topic-map/topic-participants";
@@ -37,18 +36,6 @@ export default class SimpleTopicMapSummary extends Component {
   @tracked mostLikedPosts = [];
   @tracked views = [];
   @tracked loading = true;
-
-  get generateSummaryTitle() {
-    return this.summary.canRegenerate ? "Resummarize" : "Summarize";
-  }
-
-  get summary() {
-    return this.args.topic.get("postStream.topicSummary");
-  }
-
-  get generateSummaryIcon() {
-    return this.summary.canRegenerate ? "sync" : "discourse-sparkles";
-  }
 
   get linksCount() {
     return this.args.topicDetails.links?.length ?? 0;
@@ -145,8 +132,7 @@ export default class SimpleTopicMapSummary extends Component {
       this.args.topic.like_count > 5 && this.args.topic.posts_count > 10;
     const hasLinks = this.linksCount > 0;
     const hasUsers = this.args.topic.participant_count > 5;
-    const canSummarize =
-      this.args.topic.summarizable || this.args.topic.has_summary;
+    const canSummarize = this.args.topic.has_summary;
 
     if (canSummarize) {
       return false;
@@ -431,63 +417,6 @@ export default class SimpleTopicMapSummary extends Component {
           </div>
         {{/if}}
         <div class="summarization-buttons">
-          {{#if @topic.summarizable}}
-            <DMenu
-              @onShow={{@showSummary}}
-              @arrow={{true}}
-              @identifier="map-summary"
-              @interactive={{true}}
-              @triggers="click"
-              @placement="left"
-              @modalForMobile={{true}}
-              @groupIdentifier="topic-map"
-              @inline={{true}}
-            >
-              <:trigger>
-                <DButton
-                  @translatedLabel={{this.generateSummaryTitle}}
-                  @translatedTitle={{this.generateSummaryTitle}}
-                  @icon={{this.generateSummaryIcon}}
-                  @disabled={{this.summary.loading}}
-                  class="btn-default topic-strategy-summarization"
-                />
-              </:trigger>
-              <:content>
-                <div class="topic-map">
-                  <div class="toggle-summary">
-                    {{#if this.summary.showSummaryBox}}
-                      <h3>Topic Summary</h3>
-                      <article class="summary-box">
-                        {{#unless this.summary.text}}
-                          <AiSummarySkeleton />
-                        {{/unless}}
-                        {{#if this.summary.text}}
-                          <div class="generated-summary">
-                            {{this.summary.text}}
-                          </div>
-                          {{#if this.summary.summarizedOn}}
-                            <div class="summarized-on">
-                              <p>
-                                {{i18n
-                                  "summary.summarized_on"
-                                  date=this.summary.summarizedOn
-                                }}
-                              </p>
-                              {{#if this.summary.outdated}}
-                                <p class="outdated-summary">
-                                  {{this.outdatedSummaryWarningText}}
-                                </p>
-                              {{/if}}
-                            </div>
-                          {{/if}}
-                        {{/if}}
-                      </article>
-                    {{/if}}
-                  </div>
-                </div>
-              </:content>
-            </DMenu>
-          {{/if}}
           {{#if @topic.has_summary}}
             <DButton
               @action={{if

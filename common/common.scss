@@ -1,7 +1,12 @@
 body:not(.archetype-private_message) {
   article .topic-map {
-    // hide default map
-    display: none;
+    .map, .topic-map-expanded, .top-replies, .information > p:first-child, .toggle-summary  {
+      display: none;
+    }
+
+    .toggle-summary:has(.ai-topic-summarization) {
+      display: block;
+    }
   }
 
   .topic-map__op {
