@@ -1,6 +1,10 @@
 body:not(.archetype-private_message) {
   article .topic-map {
-    .map, .topic-map-expanded, .top-replies, .information > p:first-child, .toggle-summary  {
+    .map,
+    .topic-map-expanded,
+    .top-replies,
+    .information > p:first-child,
+    .toggle-summary {
       display: none;
     }
 
